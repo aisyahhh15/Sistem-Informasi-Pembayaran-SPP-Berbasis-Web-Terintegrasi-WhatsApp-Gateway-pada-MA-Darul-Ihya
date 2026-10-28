@@ -1,0 +1,192 @@
+.sidebar {
+  width: var(--sidebar-width);
+  height: 100vh;
+  background-color: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  transition: transform var(--transition-normal);
+}
+
+.sidebar-header {
+  height: var(--topbar-height);
+  padding: 0 var(--space-4);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.brand-logo {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(135deg, var(--primary-600), var(--primary-700));
+  color: var(--surface);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+}
+
+.brand-title {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+.brand-subtitle {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.sidebar-close-btn {
+  display: none;
+  color: var(--text-secondary);
+  padding: var(--space-1);
+  border-radius: var(--radius-sm);
+}
+
+.sidebar-close-btn:hover {
+  background-color: var(--page-bg);
+  color: var(--text-primary);
+}
+
+.sidebar-nav {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--space-4) var(--space-3);
+}
+
+.nav-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.nav-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 10px var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  transition: all var(--transition-fast);
+}
+
+.nav-link:hover {
+  background-color: var(--primary-50);
+  color: var(--primary-600);
+}
+
+.nav-link.active {
+  background-color: var(--primary-100);
+  color: var(--primary-700);
+  font-weight: 600;
+}
+
+.nav-link:focus-visible,
+.logout-btn:focus-visible,
+.sidebar-close-btn:focus-visible {
+  outline: 3px solid rgba(22, 131, 74, 0.3);
+  outline-offset: 2px;
+}
+
+.nav-icon {
+  flex-shrink: 0;
+}
+
+.sidebar-footer {
+  padding: var(--space-3);
+  border-top: 1px solid var(--border);
+}
+
+.logout-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  width: 100%;
+  padding: 10px var(--space-3);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--danger);
+  transition: background-color var(--transition-fast);
+}
+
+.logout-btn:hover {
+  background-color: var(--danger-bg);
+}
+
+.sidebar-backdrop {
+  display: none;
+}
+
+/* Mobile Responsive Drawer */
+@media (max-width: 992px) {
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    transform: translateX(-100%);
+    box-shadow: var(--shadow-lg);
+  }
+
+  .sidebar-open {
+    transform: translateX(0);
+  }
+
+  .sidebar-close-btn {
+    display: flex;
+  }
+
+  .sidebar-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(23, 33, 27, 0.4);
+    z-index: 35;
+    backdrop-filter: blur(2px);
+  }
+}
+/* Brand treatment for the visual refresh. */
+.sidebar { background: #14532D; border-right-color: rgba(255, 255, 255, .08); }
+.sidebar-header { border-bottom-color: rgba(255, 255, 255, .12); }
+.brand-logo { background: rgba(255, 255, 255, .12); color: #DCFCE7; }
+.brand-title { color: #FFFFFF; }
+.brand-subtitle { color: #B7CDBD; }
+.sidebar-close-btn { color: #D4E2D7; }
+.sidebar-close-btn:hover { color: #FFFFFF; background: rgba(255, 255, 255, .1); }
+.sidebar-nav { padding: 20px 12px; }
+.nav-list { gap: 4px; }
+.nav-link { min-height: 44px; padding: 10px 12px; color: #D4E2D7; font-size: 13px; }
+.nav-link:hover { color: #FFFFFF; background: rgba(255, 255, 255, .09); }
+.nav-link.active { color: #14532D; background: #DCFCE7; font-weight: 650; }
+.nav-link.active .nav-icon { color: #14532D; }
+.sidebar-footer { border-top-color: rgba(255, 255, 255, .12); }
+.logout-btn { color: #F3C9CD; }
+.logout-btn:hover { color: #FFFFFF; background: rgba(255, 255, 255, .1); }
+.sidebar a, .sidebar button { transition: background-color 180ms ease, color 180ms ease; }
+.sidebar a[aria-current="page"] { background: #DCFCE7; color: #14532D; }
+.sidebar a:focus-visible, .sidebar button:focus-visible { outline-color: rgba(220, 252, 231, .7); }
+@media (prefers-reduced-motion: reduce) {
+  .sidebar a, .sidebar button { transition: none; }
+}
