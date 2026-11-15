@@ -8,11 +8,13 @@ const getPageTitle = (pathname) => {
     case '/':
       return 'Dashboard';
     case '/students':
-      return 'Data Siswa';
     case '/classes':
-      return 'Data Kelas';
+    case '/master':
+    case '/master/students':
+    case '/master/classes':
+      return 'Data Master';
     case '/spp':
-      return 'Data SPP';
+      return 'Edit Tarif dan Skema';
     case '/payments/new':
       return 'Transaksi Pembayaran';
     case '/payments/history':
@@ -30,7 +32,7 @@ const getPageTitle = (pathname) => {
   }
 };
 
-export default function AdminLayout({ onLogout }) {
+export default function AdminLayout({ onLogout, currentUser }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
   const pageTitle = getPageTitle(location.pathname);
@@ -41,11 +43,13 @@ export default function AdminLayout({ onLogout }) {
         isOpen={sidebarOpen} 
         onClose={() => setSidebarOpen(false)} 
         onLogout={onLogout}
+        currentUser={currentUser}
       />
       <div className="main-content">
         <Topbar 
           onToggleSidebar={() => setSidebarOpen((prev) => !prev)} 
           title={pageTitle}
+          currentUser={currentUser}
         />
         <main className="page-container">
           <Outlet />

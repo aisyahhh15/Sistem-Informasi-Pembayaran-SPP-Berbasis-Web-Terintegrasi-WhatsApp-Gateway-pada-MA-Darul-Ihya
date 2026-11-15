@@ -3,8 +3,10 @@ import { Menu, User, ShieldCheck, Calendar } from 'lucide-react';
 import { useData } from '../../app/DataProvider';
 import './Topbar.css';
 
-export default function Topbar({ onToggleSidebar, title = 'Dashboard' }) {
-  const { demoCredentials, adminProfile } = useData();
+export default function Topbar({ onToggleSidebar, title = 'Dashboard', currentUser }) {
+  const { accounts, adminProfile } = useData();
+  const account = accounts.find((item) => item.id === currentUser?.id) || currentUser;
+  const profileName = account?.role === 'admin' ? adminProfile.name : account?.name;
   const currentDate = new Date().toLocaleDateString('id-ID', {
     weekday: 'long',
     year: 'numeric',
@@ -41,8 +43,8 @@ export default function Topbar({ onToggleSidebar, title = 'Dashboard' }) {
             <User size={16} />
           </div>
           <div className="user-info">
-            <span className="user-name">{adminProfile.name}</span>
-            <span className="user-role">Admin Demo · {demoCredentials.username}</span>
+            <span className="user-name">{profileName || 'Pengguna Demo'}</span>
+            <span className="user-role">{account?.role === 'admin' ? 'Admin' : 'Tata Usaha'} · {account?.username}</span>
           </div>
         </div>
       </div>

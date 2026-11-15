@@ -1,6 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import { Download, Printer } from 'lucide-react';
 import PageHeader from '../components/layout/PageHeader';
+import Feedback from '../components/ui/Feedback';
 import { useData } from '../app/DataProvider';
 import { formatDate, formatPeriod, formatRupiah } from '../utils/formatters';
 
@@ -19,6 +20,7 @@ export default function Reports() {
   const [classId, setClassId] = useState('all');
   const [studentId, setStudentId] = useState('all');
   const [feedback, setFeedback] = useState('');
+  const [feedbackTone, setFeedbackTone] = useState('success');
   const studentById = useMemo(() => Object.fromEntries(data.students.map((student) => [student.id, student])), [data.students]);
   const classById = useMemo(() => Object.fromEntries(data.classes.map((klass) => [klass.id, klass.name])), [data.classes]);
   const invoiceById = useMemo(() => Object.fromEntries(data.invoices.map((invoice) => [invoice.id, invoice])), [data.invoices]);
@@ -51,12 +53,12 @@ export default function Reports() {
   }).reduce((sum, invoice) => sum + Math.max(0, invoice.amount - (invoice.paidAmount ?? (invoice.status === 'paid' ? invoice.amount : 0))), 0);
 
   const downloadCsv = () => {
-    if (!filtered.length) { setFeedback('Tidak ada baris untuk diekspor.'); return; }
-    const headers = ['No. Transaksi', 'Tanggal', 'NIS', 'Nama Siswa', 'Kelas', 'Periode SPP', 'Nominal', 'Status'];
+    if (!filtered.length) { setFeedbackTone('warning'); setFeedback('Tidak ada baris untuk diekspor.'); return; }
+    const headers = ['No. Transaksi', 'Tanggal', 'NIS', 'Nama Siswa', 'Kelas', 'Bulan dibayar', 'Nominal', 'Sisa tagihan', 'Petugas', 'Status'];
     const rows = filtered.map((transaction) => {
       const student = studentById[transaction.studentId];
       const invoice = invoiceById[transaction.invoiceId];
-      return [transaction.id, transaction.date, student?.nis || '-', student?.name || 'Siswa', classById[student?.classId] || '-', invoice ? formatPeriod(invoice.month, invoice.year) : '-', transaction.amount, transaction.status];
+      return [transaction.id, transaction.date, student?.nis || '-', student?.name || 'Siswa', classById[student?.classId] || '-', invoice ? formatPeriod(invoice.month, invoice.year) : '-', transaction.amount, transaction.balanceAfter ?? '-', transaction.recordedBy || '-', transaction.status];
     });
     const csv = `\uFEFF${[headers, ...rows].map((row) => row.map(csvCell).join(',')).join('\r\n')}`;
     const blob = new Blob([csv], { type: 'text/csv;charset=utf-8' });
@@ -68,13 +70,14 @@ export default function Reports() {
     link.click();
     link.remove();
     window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+    setFeedbackTone('success');
     setFeedback('File CSV laporan berhasil dibuat oleh browser.');
   };
 
   return (
     <div className="report-page">
       <PageHeader title="Laporan Pembayaran SPP" description="Filter transaksi menurut rentang tanggal, bulan, tahun ajaran, dan kelas." />
-      {feedback && <p className="inline-feedback" role="status">{feedback}</p>}
+      <Feedback message={feedback} tone={feedbackTone} />
       <div className="page-toolbar report-filters">
         <select className="filter-control" aria-label="Filter periode laporan" value={period} onChange={(event) => setPeriod(event.target.value)}><option value="all">Semua periode</option>{periods.map((item) => <option value={item.key} key={item.key}>{formatPeriod(item.month, item.year)}</option>)}</select>
         <select className="filter-control" aria-label="Filter tahun ajaran" value={schoolYear} onChange={(event) => setSchoolYear(event.target.value)}><option value="all">Semua tahun ajaran</option>{schoolYears.map((year) => <option value={year} key={year}>{year}</option>)}</select>
@@ -82,7 +85,7 @@ export default function Reports() {
         <input className="filter-control" aria-label="Tanggal akhir" type="date" value={dateTo} onChange={(event) => setDateTo(event.target.value)} />
         <select className="filter-control" aria-label="Filter kelas laporan" value={classId} onChange={(event) => { setClassId(event.target.value); setStudentId('all'); }}><option value="all">Semua kelas</option>{data.classes.map((klass) => <option value={klass.id} key={klass.id}>{klass.name}</option>)}</select>
         <select className="filter-control" aria-label="Filter siswa laporan" value={studentId} onChange={(event) => setStudentId(event.target.value)}><option value="all">Semua siswa</option>{availableStudents.map((student) => <option value={student.id} key={student.id}>{student.name}</option>)}</select>
-        <div className="report-actions"><button className="button button-secondary" type="button" onClick={() => window.print()} disabled={!filtered.length} title={!filtered.length ? 'Tidak ada baris untuk dicetak' : ''}><Printer size={16} /> Cetak</button><button className="button button-secondary" type="button" onClick={() => setFeedback('Ekspor Excel masih simulasi; belum menghasilkan file. Gunakan Unduh CSV untuk file data yang dapat dibuka di Excel.')} disabled={!filtered.length} title={!filtered.length ? 'Tidak ada baris untuk diekspor' : ''}>Excel (Simulasi)</button><button className="button button-secondary" type="button" onClick={() => setFeedback('Ekspor PDF masih simulasi; belum menghasilkan file. Gunakan Cetak untuk menyimpan sebagai PDF dari browser.')} disabled={!filtered.length} title={!filtered.length ? 'Tidak ada baris untuk diekspor' : ''}>PDF (Simulasi)</button><button className="button button-primary" type="button" onClick={downloadCsv} disabled={!filtered.length} title={!filtered.length ? 'Tidak ada baris untuk diunduh' : ''}><Download size={16} /> Unduh CSV</button></div>
+        <div className="report-actions"><button className="button button-secondary" type="button" onClick={() => window.print()} disabled={!filtered.length} title={!filtered.length ? 'Tidak ada baris untuk dicetak' : ''}><Printer size={16} /> Cetak</button><button className="button button-secondary" type="button" onClick={() => { setFeedbackTone('warning'); setFeedback('Ekspor Excel masih simulasi; belum menghasilkan file. Gunakan Unduh CSV untuk file data yang dapat dibuka di Excel.'); }} disabled={!filtered.length} title={!filtered.length ? 'Tidak ada baris untuk diekspor' : ''}>Excel (Simulasi)</button><button className="button button-secondary" type="button" onClick={() => { setFeedbackTone('warning'); setFeedback('Ekspor PDF masih simulasi; belum menghasilkan file. Gunakan Cetak untuk menyimpan sebagai PDF dari browser.'); }} disabled={!filtered.length} title={!filtered.length ? 'Tidak ada baris untuk diekspor' : ''}>PDF (Simulasi)</button><button className="button button-primary" type="button" onClick={downloadCsv} disabled={!filtered.length} title={!filtered.length ? 'Tidak ada baris untuk diunduh' : ''}><Download size={16} /> Unduh CSV</button></div>
       </div>
 
       <section className="report-summary-grid" aria-label="Ringkasan laporan">
@@ -93,13 +96,13 @@ export default function Reports() {
       </section>
 
       <section className="table-card report-table"><div className="table-scroll"><table className="data-table">
-        <thead><tr><th>No. transaksi</th><th>Tanggal</th><th>Siswa / NIS</th><th>Kelas</th><th>Periode SPP</th><th>Nominal</th><th>Status</th></tr></thead>
+        <thead><tr><th>No. transaksi</th><th>Tanggal</th><th>Siswa / NIS</th><th>Kelas</th><th>Bulan dibayar</th><th>Nominal</th><th>Sisa tagihan</th><th>Petugas</th><th>Status</th></tr></thead>
         <tbody>{filtered.map((transaction) => {
           const student = studentById[transaction.studentId];
           const invoice = invoiceById[transaction.invoiceId];
-          return <tr key={transaction.id}><td className="cell-primary">{transaction.id}</td><td>{formatDate(transaction.date)}</td><td><span className="cell-primary">{student?.name || 'Siswa'}</span><span className="cell-secondary">NIS {student?.nis || '-'}</span></td><td>{classById[student?.classId] || '-'}</td><td>{invoice ? formatPeriod(invoice.month, invoice.year) : '-'}</td><td className="cell-primary">{formatRupiah(transaction.amount)}</td><td><span className="status-badge">{transaction.status}</span></td></tr>;
-        })}{!filtered.length && <tr><td className="table-empty" colSpan="7">Tidak ada transaksi sesuai filter.</td></tr>}</tbody>
-      </table></div><div className="table-caption">{filtered.length} transaksi · Total {formatRupiah(total)}. CSV berisi data sesuai filter.</div></section>
+          return <tr key={transaction.id}><td className="cell-primary">{transaction.id}{transaction.batchId && <span className="cell-secondary">Rapel {transaction.batchId}</span>}</td><td>{formatDate(transaction.date)}</td><td><span className="cell-primary">{student?.name || 'Siswa'}</span><span className="cell-secondary">NIS {student?.nis || '-'}</span></td><td>{classById[student?.classId] || '-'}</td><td>{invoice ? formatPeriod(invoice.month, invoice.year) : '-'}</td><td className="cell-primary">{formatRupiah(transaction.amount)}</td><td>{formatRupiah(transaction.balanceAfter ?? 0)}</td><td>{transaction.recordedBy || '-'}</td><td><span className="status-badge">{transaction.status}</span></td></tr>;
+        })}{!filtered.length && <tr><td className="table-empty" colSpan="9">Tidak ada transaksi sesuai filter.</td></tr>}</tbody>
+      </table></div><div className="table-caption">{filtered.length} transaksi · Total {formatRupiah(total)}. Baris rapel tercatat per bulan dan berbagi nomor kelompok transaksi. CSV berisi data sesuai filter.</div></section>
     </div>
   );
 }

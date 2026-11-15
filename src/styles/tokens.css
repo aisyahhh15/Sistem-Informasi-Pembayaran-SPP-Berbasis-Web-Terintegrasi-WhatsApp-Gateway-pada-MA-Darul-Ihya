@@ -1,23 +1,23 @@
 :root {
   /* Brand Primary Colors */
-  --primary-700: #14532D;
+  --primary-700: #11663A;
   --primary-600: #16834A;
-  --primary-500: #16A34A;
-  --primary-100: #DCFCE7;
+  --primary-500: #22A45A;
+  --primary-100: #DDF5E6;
   --primary-50: #F0FBF4;
 
   /* Background & Surfaces */
-  --page-bg: #F8FAFC;
+  --page-bg: #F7F9F8;
   --surface: #FFFFFF;
   --surface-hover: #F2F6F4;
 
   /* Typography */
-  --text-primary: #334155;
-  --text-secondary: #64748B;
-  --text-muted: #8E9C92;
+  --text-primary: #17211B;
+  --text-secondary: #647168;
+  --text-muted: #849087;
 
   /* Borders & Dividers */
-  --border: #E2E8F0;
+  --border: #E2E9E4;
   --border-focus: #16834A;
 
   /* Feedback Colors */

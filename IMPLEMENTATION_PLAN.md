@@ -94,6 +94,15 @@ ma-darul-ihya-spp/
 
 **Gate:** tinjau hasil visual seluruh halaman dan build produksi; tunggu persetujuan untuk perubahan lanjutan.
 
+### Phase 7 — Akun demo Admin dan Tata Usaha
+- Tambahkan akun Admin dan TU pada state frontend; akun tetap simulasi, bukan autentikasi nyata.
+- Admin dapat membuat, mengubah, dan menghapus akun TU serta mengubah kredensial demo Admin.
+- Batasi menu dan route TU ke Dashboard, Data Siswa, Transaksi, Riwayat, Tunggakan, dan Laporan.
+- Minta konfirmasi sebelum logout.
+- Perbarui panduan akun dan keterbatasan pada README.
+
+**Gate:** tinjau akses kedua role, pengelolaan akun demo, konfirmasi logout, dan build produksi; tunggu persetujuan untuk perubahan lanjutan.
+
 ## 6. Sumber Data dan Aturan
 - Gunakan satu sumber state/data dummy untuk entitas terkait.
 - Tagihan unik berdasarkan siswa + periode + tahun ajaran.

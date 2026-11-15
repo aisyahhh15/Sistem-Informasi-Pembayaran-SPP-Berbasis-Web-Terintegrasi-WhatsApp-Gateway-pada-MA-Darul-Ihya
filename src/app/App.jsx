@@ -13,37 +13,45 @@ import Arrears from '../pages/Arrears';
 import WhatsApp from '../pages/WhatsApp';
 import Reports from '../pages/Reports';
 import Settings from '../pages/Settings';
+import MasterData from '../pages/MasterData';
+
+function RoleGate({ currentUser, allowed, children }) {
+  return allowed.includes(currentUser?.role) ? children : <Navigate to="/" replace />;
+}
+
+function ApplicationRoutes() {
+  const [currentUser, setCurrentUser] = useState(null);
+
+  return (
+    <Routes>
+      <Route path="/login" element={currentUser ? <Navigate to="/" replace /> : <Login onLogin={setCurrentUser} />} />
+      <Route path="/" element={currentUser ? <AdminLayout currentUser={currentUser} onLogout={() => setCurrentUser(null)} /> : <Navigate to="/login" replace />}>
+        <Route index element={<Dashboard />} />
+        <Route path="students" element={<Navigate to="/master/students" replace />} />
+        <Route path="classes" element={<RoleGate currentUser={currentUser} allowed={['admin']}><Navigate to="/master/classes" replace /></RoleGate>} />
+        <Route path="master" element={<MasterData currentUser={currentUser} />}>
+          <Route index element={<Navigate to="students" replace />} />
+          <Route path="students" element={<Students />} />
+          <Route path="classes" element={<RoleGate currentUser={currentUser} allowed={['admin']}><Classes /></RoleGate>} />
+        </Route>
+        <Route path="spp" element={<RoleGate currentUser={currentUser} allowed={['admin']}><SPP /></RoleGate>} />
+        <Route path="payments/new" element={<Payments />} />
+        <Route path="payments/history" element={<History />} />
+        <Route path="arrears" element={<Arrears />} />
+        <Route path="whatsapp" element={<RoleGate currentUser={currentUser} allowed={['admin']}><WhatsApp /></RoleGate>} />
+        <Route path="reports" element={<Reports />} />
+        <Route path="settings" element={<RoleGate currentUser={currentUser} allowed={['admin']}><Settings /></RoleGate>} />
+      </Route>
+      <Route path="*" element={<Navigate to={currentUser ? '/' : '/login'} replace />} />
+    </Routes>
+  );
+}
 
 export default function App() {
-  const [isDemoLoggedIn, setIsDemoLoggedIn] = useState(false);
-
   return (
     <BrowserRouter>
       <DataProvider>
-      <Routes>
-        <Route
-          path="/login"
-          element={isDemoLoggedIn ? <Navigate to="/" replace /> : <Login onLogin={() => setIsDemoLoggedIn(true)} />}
-        />
-        
-        <Route
-          path="/"
-          element={isDemoLoggedIn ? <AdminLayout onLogout={() => setIsDemoLoggedIn(false)} /> : <Navigate to="/login" replace />}
-        >
-          <Route index element={<Dashboard />} />
-          <Route path="students" element={<Students />} />
-          <Route path="classes" element={<Classes />} />
-          <Route path="spp" element={<SPP />} />
-          <Route path="payments/new" element={<Payments />} />
-          <Route path="payments/history" element={<History />} />
-          <Route path="arrears" element={<Arrears />} />
-          <Route path="whatsapp" element={<WhatsApp />} />
-          <Route path="reports" element={<Reports />} />
-          <Route path="settings" element={<Settings />} />
-        </Route>
-
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
+        <ApplicationRoutes />
       </DataProvider>
     </BrowserRouter>
   );

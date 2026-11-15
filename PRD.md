@@ -1,6 +1,6 @@
 # PRD — Sistem Informasi Pembayaran SPP MA Darul Ihya
 
-- Versi: 1.0 | Status: **Baseline disetujui untuk prototipe frontend**
+- Versi: 1.1 | Status: **Cakupan role demo diperluas atas permintaan pengguna**
 - Produk: Sistem Informasi Pembayaran SPP Berbasis Web Terintegrasi WhatsApp Gateway Menggunakan Prototyping
 - Target: admin/bendahara MA Darul Ihya
 - Stack: React + Vite; frontend-only; data dummy
@@ -19,12 +19,14 @@ Tujuan terukur prototipe:
 - Seluruh menu inti dapat dicoba di desktop dan layar kecil.
 
 ## 3. Pengguna dan Hak Akses
-**Admin/Bendahara** adalah satu-satunya persona pada prototipe. Login hanya simulasi sisi frontend; jangan menganggapnya sebagai autentikasi aman. Tidak ada portal siswa/orang tua.
+**Admin** dan **Tata Usaha (TU)** adalah persona demo pada prototipe. Login dan pembatasan menu hanya simulasi sisi frontend; jangan menganggapnya sebagai autentikasi aman. Admin dapat mengelola akun TU. TU hanya mendapat menu operasional yang diizinkan dan tidak dapat membuka pengaturan atau kelola akun. Tidak ada portal siswa/orang tua.
 
 ## 4. Lingkup Fitur
 ### 4.1 Login dan navigasi
-- Login demo dan logout.
-- Layout admin dengan sidebar, topbar, judul halaman, dan area konten.
+- Login demo untuk akun Admin dan TU serta logout dengan konfirmasi.
+- Layout dengan sidebar, topbar, judul halaman, dan area konten.
+- Admin dapat membuka semua menu. TU dapat membuka Dashboard, Data Siswa, Transaksi Pembayaran, Riwayat Pembayaran, Data Tunggakan, dan Laporan Pembayaran.
+- Data Kelas, Data SPP, WhatsApp Gateway, Pengaturan, dan kelola akun hanya tersedia bagi Admin.
 
 ### 4.2 Dashboard
 - Kartu: Total Siswa, Pembayaran Bulan Ini, Sudah Membayar, Belum Membayar, Total Tunggakan.
@@ -73,8 +75,10 @@ Tujuan terukur prototipe:
 - Sediakan cetak dan ekspor Excel/PDF hanya bila dapat benar-benar menghasilkan file pada prototipe; jika belum, tampilkan status/penjelasan yang jujur.
 
 ### 4.11 Pengaturan
-- Perubahan username/password demo pada state lokal saja.
-- Tidak ada penyimpanan kredensial server.
+- Admin dapat mengubah username/password akun demo Admin dan profil lokal.
+- Admin dapat membuat, mengubah, dan menghapus akun demo TU.
+- Akun/kredensial demo disimpan di browser hanya untuk prototipe; kata sandi tidak aman dan bukan autentikasi nyata.
+- TU tidak dapat membuka Pengaturan atau mengelola akun.
 
 ## 5. Navigasi Utama
 1. Dashboard
@@ -86,8 +90,8 @@ Tujuan terukur prototipe:
 7. Data Tunggakan
 8. WhatsApp Gateway
 9. Laporan Pembayaran
-10. Pengaturan
-11. Logout
+10. Pengaturan & Kelola Akun (Admin saja)
+11. Logout dengan konfirmasi
 
 ## 6. Aturan Bisnis
 - Periode tagihan diidentifikasi dengan siswa + bulan + tahun ajaran.
@@ -105,10 +109,11 @@ Tujuan terukur prototipe:
 - Tidak menampilkan data pribadi nyata; gunakan nama/NIS/nomor kontak fiktif.
 
 ## 8. Di Luar Lingkup
-Backend, database, API, autentikasi/otorisasi nyata, WhatsApp Gateway provider sungguhan, deployment, multi-role, portal orang tua/siswa, pembayaran online, dan integrasi eksternal apa pun. Jangan menambah fitur tanpa persetujuan.
+Backend, database, API, autentikasi/otorisasi nyata, WhatsApp Gateway provider sungguhan, deployment, role selain Admin/TU demo, portal orang tua/siswa, pembayaran online, dan integrasi eksternal apa pun. Jangan menambah fitur tanpa persetujuan.
 
 ## 9. Kriteria Penerimaan
 - Seluruh menu pada daftar navigasi dapat dibuka.
+- Login Admin/TU, pembatasan route/menu TU, kelola akun TU oleh Admin, dan konfirmasi logout berfungsi dalam simulasi frontend.
 - CRUD data demo memberi feedback dan validasi.
 - Transaksi memperbarui riwayat, dashboard, dan tunggakan secara konsisten.
 - Pencarian/filter menghasilkan data yang sesuai.

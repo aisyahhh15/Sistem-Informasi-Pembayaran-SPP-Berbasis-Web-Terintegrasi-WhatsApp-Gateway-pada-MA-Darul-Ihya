@@ -1,10 +1,11 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { useState } from 'react';
+import { NavLink, useNavigate } from 'react-router-dom';
+import ConfirmDialog from '../ui/ConfirmDialog';
 import {
   LayoutDashboard,
-  Users,
+  Database,
   GraduationCap,
-  CreditCard,
+  Tags,
   Receipt,
   History,
   AlertCircle,
@@ -18,9 +19,8 @@ import './Sidebar.css';
 
 const navItems = [
   { path: '/', label: 'Dashboard', icon: LayoutDashboard },
-  { path: '/students', label: 'Data Siswa', icon: Users },
-  { path: '/classes', label: 'Data Kelas', icon: GraduationCap },
-  { path: '/spp', label: 'Data SPP', icon: CreditCard },
+  { path: '/master', label: 'Data Master', icon: Database },
+  { path: '/spp', label: 'Edit Tarif dan Skema', icon: Tags },
   { path: '/payments/new', label: 'Transaksi Pembayaran', icon: Receipt },
   { path: '/payments/history', label: 'Riwayat Pembayaran', icon: History },
   { path: '/arrears', label: 'Data Tunggakan', icon: AlertCircle },
@@ -29,7 +29,17 @@ const navItems = [
   { path: '/settings', label: 'Pengaturan', icon: Settings },
 ];
 
-export default function Sidebar({ isOpen, onClose, onLogout }) {
+export default function Sidebar({ isOpen, onClose, onLogout, currentUser }) {
+  const navigate = useNavigate();
+  const [confirmLogout, setConfirmLogout] = useState(false);
+  const visibleItems = navItems.filter((item) => currentUser?.role === 'admin' || !['/classes', '/spp', '/whatsapp', '/settings'].includes(item.path));
+  const logout = () => {
+    setConfirmLogout(false);
+    onClose?.();
+    onLogout?.();
+    navigate('/login', { replace: true });
+  };
+
   return (
     <>
       {/* Mobile Backdrop */}
@@ -57,7 +67,7 @@ export default function Sidebar({ isOpen, onClose, onLogout }) {
 
         <nav className="sidebar-nav">
           <ul className="nav-list">
-            {navItems.map((item) => {
+            {visibleItems.map((item) => {
               const Icon = item.icon;
               return (
                 <li key={item.path} className="nav-item">
@@ -77,12 +87,13 @@ export default function Sidebar({ isOpen, onClose, onLogout }) {
         </nav>
 
         <div className="sidebar-footer">
-          <NavLink to="/login" className="logout-btn" onClick={() => { onClose?.(); onLogout?.(); }}>
+          <button type="button" className="logout-btn" onClick={() => setConfirmLogout(true)}>
             <LogOut size={18} />
-            <span>Keluar (Logout)</span>
-          </NavLink>
+            <span>Keluar</span>
+          </button>
         </div>
       </aside>
+      {confirmLogout && <ConfirmDialog title="Keluar dari aplikasi?" message={`Anda akan mengakhiri sesi demo ${currentUser?.role === 'admin' ? 'Admin' : 'Tata Usaha'}.`} confirmText="Ya, keluar" onConfirm={logout} onCancel={() => setConfirmLogout(false)} variant="warning" />}
     </>
   );
 }
