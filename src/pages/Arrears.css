@@ -84,9 +84,15 @@
   .arrears-table-heading { align-items: flex-start; flex-direction: column; }
 }
 @media (max-width: 520px) {
-  .arrears-kpi-grid { grid-template-columns: 1fr; }
+  .arrears-kpi-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+  .arrears-kpi-card { grid-template-columns: minmax(0, 1fr) auto; gap: 8px; padding: 12px; }
+  .arrears-kpi-card > div > strong { font-size: clamp(17px, 5vw, 22px); }
+  .arrears-kpi-card > div > strong small { font-size: 11px; }
+  .arrears-kpi-card > i { width: 32px; height: 32px; }
+  .arrears-kpi-card > p { font-size: 9px; }
   .arrears-filter-controls { grid-template-columns: 1fr; }
-  .arrears-tier-tabs button { flex: 1 1 44%; }
+  .arrears-tier-tabs button { min-height: 42px; flex: 1 1 44%; }
+  .arrears-pay-link, .arrears-remind-button { min-height: 40px; }
   .arrears-month-line { grid-template-columns: 1fr auto; }
   .arrears-month-line small { grid-column: 1 / -1; text-align: left; }
 }

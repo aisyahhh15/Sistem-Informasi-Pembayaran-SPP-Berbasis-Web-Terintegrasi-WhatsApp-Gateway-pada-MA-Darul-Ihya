@@ -516,3 +516,43 @@
 .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; clip-path: inset(50%); }
 @media (max-width: 980px) { .wa-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .wa-redesign-grid { grid-template-columns: 1fr; } }
 @media (max-width: 600px) { .wa-gateway-banner { align-items: flex-start; flex-direction: column; } .wa-connection-state { align-self: flex-start; } .wa-summary-grid { gap: 9px; } .wa-summary-grid .metric-card { min-height: 112px; padding: 13px; } .wa-log-heading { align-items: flex-start; flex-direction: column; } .wa-log-toolbar { align-items: stretch; flex-direction: column; } .wa-search, .wa-log-toolbar .filter-control { width: 100%; min-width: 0; } }
+
+/* Shared tablet and phone refinements. */
+@media (max-width: 760px) {
+  .page-container { min-width: 0; padding: 18px 15px 26px; }
+  .page-header { align-items: flex-start; gap: 12px; }
+  .page-header-content { min-width: 0; }
+  .page-header-title { font-size: 22px; }
+  .page-header-action { flex-wrap: wrap; }
+  .page-toolbar { width: 100%; align-items: stretch; }
+  .page-toolbar > * { min-width: min(160px, 100%); flex: 1 1 160px; }
+  .table-scroll { max-width: 100%; overscroll-behavior-inline: contain; }
+  .dialog-backdrop { padding: 12px; }
+  .entity-dialog { max-height: calc(100dvh - 24px); }
+  .entity-dialog-header { padding: 15px 16px; }
+  .entity-form { gap: 13px; padding: 16px; }
+  .report-filters { align-items: stretch; }
+  .report-filters > .filter-control { min-width: 0; flex: 1 1 180px; }
+  .report-actions { flex-wrap: wrap; }
+  .report-actions > .button { flex: 1 1 135px; }
+  .wa-send-button { width: 100%; }
+}
+
+@media (max-width: 480px) {
+  .page-container { padding: 15px 12px 22px; }
+  .page-header-title { font-size: 20px; }
+  .page-header-description { font-size: 12px; }
+  .page-header-action { width: 100%; }
+  .page-header-action > .button { width: 100%; }
+  .page-toolbar { flex-direction: column; }
+  .page-toolbar > *, .filter-control { width: 100%; min-width: 0; }
+  .button { min-height: 44px; }
+  .table-action { min-height: 40px; padding: 8px 10px; }
+  .table-actions { flex-wrap: wrap; }
+  .entity-dialog { width: 100%; max-height: calc(100dvh - 16px); border-radius: 16px; }
+  .dialog-backdrop { place-items: end center; padding: 8px; }
+  .entity-form .dialog-actions { position: sticky; bottom: -16px; padding: 10px 0 2px; background: #fff; }
+  .confirm-dialog { width: 100%; max-width: 430px; }
+  .report-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+  .report-actions > .button { flex: 1 1 100%; }
+}

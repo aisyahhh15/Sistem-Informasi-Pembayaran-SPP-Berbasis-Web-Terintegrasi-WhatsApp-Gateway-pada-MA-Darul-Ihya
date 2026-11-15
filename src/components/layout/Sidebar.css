@@ -167,6 +167,12 @@
     backdrop-filter: blur(2px);
   }
 }
+
+@media (max-width: 480px) {
+  .sidebar { width: min(84vw, 300px); height: 100vh; height: 100dvh; }
+  .sidebar-header { min-height: var(--topbar-height); }
+  .sidebar-backdrop { backdrop-filter: none; }
+}
 /* Brand treatment for the visual refresh. */
 .sidebar { background: #14532D; border-right-color: rgba(255, 255, 255, .08); }
 .sidebar-header { border-bottom-color: rgba(255, 255, 255, .12); }

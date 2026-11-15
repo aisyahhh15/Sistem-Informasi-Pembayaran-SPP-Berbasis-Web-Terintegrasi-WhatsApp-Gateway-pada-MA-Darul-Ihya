@@ -97,3 +97,19 @@ button {
   .page-container { padding: 20px 16px 28px; }
   .page-header { margin-bottom: 18px; }
 }
+
+@media (max-width: 480px) {
+  .page-container { padding: 16px 13px 24px; }
+  .page-header { gap: 12px; }
+  .page-header-content { min-width: 0; }
+  .page-header-action { width: 100%; flex-wrap: wrap; }
+  .page-header-action > .button { flex: 1 1 auto; }
+}
+
+@media (max-width: 480px) {
+  .page-container { padding: 16px 13px 24px; }
+  .page-header { gap: 12px; }
+  .page-header-content { min-width: 0; }
+  .page-header-action { width: 100%; flex-wrap: wrap; }
+  .page-header-action > .button { flex: 1 1 auto; }
+}

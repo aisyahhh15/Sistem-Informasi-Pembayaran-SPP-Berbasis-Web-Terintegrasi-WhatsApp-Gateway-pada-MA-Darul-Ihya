@@ -36,6 +36,10 @@
   .history-filter-card { grid-template-columns: repeat(2, minmax(0,1fr)); }
 }
 @media (max-width: 560px) {
-  .history-summary-grid, .history-filter-card { grid-template-columns: 1fr; }
+  .history-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 9px; }
+  .history-summary-card { padding: 12px; }
+  .history-summary-card > strong { font-size: clamp(18px, 5vw, 23px); }
+  .history-filter-card { grid-template-columns: 1fr; padding: 11px; }
   .history-table-heading { align-items: flex-start; flex-direction: column; }
+  .history-receipt-button { min-height: 40px; }
 }
